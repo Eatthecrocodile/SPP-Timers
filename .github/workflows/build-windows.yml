@@ -25,7 +25,7 @@ jobs:
 
       - name: Build EXE
         run: |
-          python -m PyInstaller main.spec
+          python -m PyInstaller SPP-Timers.spec
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
