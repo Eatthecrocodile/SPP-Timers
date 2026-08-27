@@ -1,5 +1,6 @@
 import sys
 import json
+from pathlib import Path
 
 from datetime import datetime
 from ui.timer_widget import TimerWidget
@@ -7,7 +8,7 @@ from flow_layout import FlowLayout
 from ui.settings_menu import SettingsMenu
 
 from PySide6.QtCore import QTimer, Qt
-from PySide6.QtGui import QFont, QPainter, QColor
+from PySide6.QtGui import QFont, QPainter, QColor, QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -20,6 +21,21 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QLineEdit
 )
+
+
+def resource_path(relative_path):
+    """
+    Retourne le chemin vers une ressource :
+    - depuis le dossier du projet en développement
+    - depuis le bundle PyInstaller en production
+    """
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        base_path = Path(sys._MEIPASS)
+    else:
+        base_path = Path(__file__).resolve().parent
+
+    return base_path / relative_path
+
 
 class DrawerHandle(QWidget):
 
@@ -65,6 +81,7 @@ class DrawerHandle(QWidget):
             2.5,
             2.5
         )
+
 
 class MainWindow(QWidget):
 
@@ -155,13 +172,14 @@ class MainWindow(QWidget):
         # Boutons
         self.addButton = QPushButton("+ Timer")
         self.addButton.clicked.connect(self.add_timer)
+
         self.settingsButton = QPushButton("☰")
         self.settingsButton.setStyleSheet("""
             QPushButton:hover {
                 color: black;
             }
         """)
-        
+
         self.settingsMenu = SettingsMenu(self)
         self.drawerHandle = DrawerHandle(self)
         self.drawerHandle.raise_()
@@ -250,7 +268,7 @@ class MainWindow(QWidget):
             Qt.ScrollBarAsNeeded
         )
         self.scrollArea.setFrameShape(QScrollArea.NoFrame)
-        
+
         self.scrollArea.setWidget(self.timerContainer)
 
         self.timers = []
@@ -380,7 +398,7 @@ class MainWindow(QWidget):
         self.update_clock(
             now
         )
-        
+
     def update_clock(self, now):
 
         self.clock.setText(
@@ -489,6 +507,7 @@ class MainWindow(QWidget):
                 indent=4,
                 ensure_ascii=False
             )
+
     # ==============================================================
     # IMPORT JSON
     # ==============================================================
@@ -506,6 +525,7 @@ class MainWindow(QWidget):
             return
 
         try:
+
             with open(
                 file_path,
                 "r",
@@ -670,8 +690,13 @@ class MainWindow(QWidget):
             and self.settingsMenu.is_open
         ):
             self.settingsMenu.reposition()
-            
+
+
 app = QApplication(sys.argv)
+
+# Icône de l'application Qt
+icon_path = resource_path("assets/SPP-Timer.png")
+app.setWindowIcon(QIcon(str(icon_path)))
 
 window = MainWindow()
 window.show()

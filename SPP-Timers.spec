@@ -14,7 +14,9 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[
+        ("assets/SPP-Timer.png", "assets"),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
