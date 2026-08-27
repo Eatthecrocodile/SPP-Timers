@@ -1,5 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import sys
+
+
+# Icône de l'application selon la plateforme
+if sys.platform == "win32":
+    icon_file = "assets/SPP-Timer.ico"
+else:
+    icon_file = "assets/SPP-Timer.icns"
+
 
 a = Analysis(
     ['main.py'],
@@ -14,6 +23,7 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
@@ -32,7 +42,9 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=icon_file,
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
