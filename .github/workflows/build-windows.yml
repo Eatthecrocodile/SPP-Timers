@@ -32,3 +32,4 @@ jobs:
         with:
           name: SPP-Timers-Windows
           path: dist/
+          retention-days: 1

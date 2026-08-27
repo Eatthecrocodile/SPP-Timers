@@ -32,3 +32,4 @@ jobs:
         with:
           name: SPP-Timers-macOS
           path: dist/
+          retention-days: 1
